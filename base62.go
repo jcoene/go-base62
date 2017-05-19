@@ -9,15 +9,25 @@ import (
 // characters used for conversion
 const alphabet = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
 
-// converts number to base62
+// Encode encodes an int64 to a base62 encoded string.
 func Encode(number int64) string {
+	return EncodeUint64(uint64(number))
+}
+
+// Decode decodes a base62 encoded string to an int64.
+func Decode(token string) int64 {
+	return int64(DecodeUint64(token))
+}
+
+// EncodeUint64 encodes a uint64 to a base62 encoded string.
+func EncodeUint64(number uint64) string {
 	if number == 0 {
 		return string(alphabet[0])
 	}
 
 	chars := make([]byte, 0)
 
-	length := int64(len(alphabet))
+	length := uint64(len(alphabet))
 
 	for number > 0 {
 		result := number / length
@@ -33,9 +43,9 @@ func Encode(number int64) string {
 	return string(chars)
 }
 
-// converts base62 token to int
-func Decode(token string) int64 {
-	number := int64(0)
+// DecodeUint64 decodes a base62 encoded string to an uint64.
+func DecodeUint64(token string) uint64 {
+	number := uint64(0)
 	idx := float64(0.0)
 	chars := []byte(alphabet)
 
@@ -44,8 +54,8 @@ func Decode(token string) int64 {
 
 	for _, c := range []byte(token) {
 		power := tokenLength - (idx + 1)
-		index := int64(bytes.IndexByte(chars, c))
-		number += index * int64(math.Pow(charsLength, power))
+		index := uint64(bytes.IndexByte(chars, c))
+		number += index * uint64(math.Pow(charsLength, power))
 		idx++
 	}
 

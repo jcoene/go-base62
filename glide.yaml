@@ -1,0 +1,6 @@
+package: github.com/jcoene/go-base62
+import: []
+testImport:
+- package: github.com/stretchr/testify
+  subpackages:
+  - assert
